@@ -1,0 +1,248 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+
+
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+body {
+  margin: 0;
+  overflow: auto;
+  position: relative; /* Keeps the content above the pseudo-element */
+}
+
+body::before {
+  content: ""; /* Required for the pseudo-element to render */
+  position: fixed; /* Fixes the background to the viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(./flower.jpg); /* Correct path */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: 0.2; /* Adjusts transparency of the background */
+  z-index: -1; /* Places the background behind the content */
+}
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.navbar {
+  display: flex;
+  height: 100px;
+  justify-content: center; /* Centers items horizontally */
+  align-items: center;     /* Centers items vertically */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+}
+
+
+
+/* General form styles */
+form {
+  background-color: #f9f3f3;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 30px auto;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #6a4f4b;
+  font-family: 'Georgia', serif;
+}
+
+
+
+label {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  margin-right: 20px;
+  color: #6a4f4b;
+}
+
+input, select {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-top: 10px;
+  font-size: 1rem;
+  width: 100%;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-weight: bold;
+  color: #6a4f4b;
+  box-sizing: border-box;
+  background-color: #f7f7f7;
+}
+
+input[type="checkbox"] {
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+button {
+  background-color: #e0d6e48f;
+  color: #6a4f4b;
+  border: none;
+  padding: 10px 15px;
+  font-size: 17px;
+  width: 180px;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: #e9e0e1 0.3s ease;
+  margin: 15px;
+}
+
+button:hover {
+  background-color: #6a4f4b;
+  color: #e4d0d0;
+}
+
+button:disabled {
+  background-color: #d0d0d0;
+  cursor: not-allowed;
+}
+
+input[type="text"], select {
+  background-color: #f5f5f5;
+}
+
+input[type="text"]:focus, select:focus {
+  outline: 2px solid #a38486;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+/* Styles for the flowers' description */
+div > p {
+  font-size: 1rem;
+  color: #555;
+  text-align: center;
+  margin-top: 15px;
+}
+
+p {
+  color: #6a4f4b;
+
+}
+
+input[type="checkbox"]:checked {
+  accent-color: #59383b;
+}
+
+/* Container for color checkboxes */
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* 4-5 checkboxes per row */
+  gap: 20px; /* Space between each checkbox item */
+  justify-items: center; /* Center checkboxes in their grid cells */
+  align-items: center; /* Center checkboxes vertically in their grid cells */
+  max-width: 100%; /* Ensure it doesn't overflow */
+  margin: 0 auto; /* Horizontally center the grid */
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Individual color option */
+.color-option {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #4f5d73; /* Text color for checkbox labels */
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* Hover effect on color option */
+.color-option:hover {
+  background-color: #f1f7f6; /* Light mint background on hover */
+}
+
+/* Custom checkbox design */
+.color-checkbox {
+  appearance: none;
+  margin-top: 13px;
+  border-radius: 50%;
+  border: 2px solid #d8e1e4;
+  background-color: #fff;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Style when checkbox is checked */
+.color-checkbox:checked {
+  background-color: #59383b; /* Soft coral background when checked */
+}
+
+/* Style when checkbox is hovered */
+.color-checkbox:hover {
+  border-color: #59383b; /* Change border color on hover */
+}
+
+/* Text next to checkbox (color name) */
+.color-name {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+/* Option text color when checkbox is checked */
+.color-checkbox:checked + .color-name {
+  font-weight: bold;
+  color: #59383b; /* Soft coral color when checked */
+}
+
+/* Option text color when checkbox is not checked */
+.color-checkbox:not(:checked) + .color-name {
+  color: #9c849c; /* Standard color when not checked */
+}
+
