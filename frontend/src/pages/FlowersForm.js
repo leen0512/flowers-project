@@ -1,20 +1,22 @@
-import React, { useEffect } from "react";
-import { Formik, useFormik } from "formik";
+import React from "react";
+import { useFormik } from "formik";
 import axios from "axios";
 import {object, string, array} from "yup"
 import { useMutation } from "@tanstack/react-query";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
+import {useParams} from "react-router-dom"
 
 const FlowerForm = () => {
+    const {id} = useParams();
+    const isEditMode = Boolean(id);
+
     const mockColors = [
-        { id: 1, name: "pink" }, { id: 2, name: "blue" }, { id: 3, name: "red" },
-        { id: 4, name: "yellow" }, { id: 5, name: "purple" }, { id: 6, name: "white" },
-        { id: 7, name: "orange" }, { id: 8, name: "green" }, { id: 9, name: "lavender" },
-        { id: 10, name: "peach" }, { id: 11, name: "violet" }, { id: 12, name: "burgundy" },
-        { id: 13, name: "magenta" }, { id: 14, name: "coral" }, { id: 15, name: "turquoise" },
-        { id: 16, name: "cream" }, { id: 17, name: "gold" }, { id: 18, name: "silver" },
-        { id: 19, name: "black" }, { id: 20, name: "multicolor" }
+        { id: 1, name: "red" }, { id: 2, name: "blue" }, { id: 3, name: "yellow" },
+        { id: 4, name: "green" }, { id: 5, name: "orange" }, { id: 6, name: "purple" },
+        { id: 7, name: "pink" }, { id: 8, name: "white" }, { id: 9, name: "brown" },
+        { id: 10, name: "black" }
     ];
+    
     
     const queryClient = useQueryClient(); // ✅ Ensure we have access to QueryClient
 
@@ -26,6 +28,16 @@ const FlowerForm = () => {
         });
         return res.data;
     };
+
+    const fetchFlower = async (flowerId) => {
+        const res = await axios.get(`http://localhost:8000/flowers/${flowerId}`);
+        return res.data;
+    }
+    const {data:flowerData} = useQuery({
+        queryKey: ["flower", id],
+        queryFn: () => fetchFlower(id),
+        enable: isEditMode,
+    });
 
     const mutation = useMutation({
         mutationFn: sendNewFlower,
@@ -70,13 +82,9 @@ const FlowerForm = () => {
                 .min(3, "That's not a name, that's a lost petal! (╯︵╰,)❀")
                 .required("Your flower deserves an identity, not just a mystery! (˘͈ᵕ ˘͈❀)"),
             season: string()
-                .oneOf(
-                    ["Spring", "Summer", "Autumn", "Winter"],
-                    "Even the petals are confused, what season is that? 𓇢𓆸 (⊙︿⊙✿)?"
-                )
-                .required("Every flower needs its moment, don't leave it wondering when to bloom! ( ｡•́︿•̀｡ )❃"),
+                .required("Every flower needs its moment, don't leave yours wondering when to bloom! ( ｡•́︿•̀｡ )❃"),
             color_ids: array()
-                .min(1, "No colors? Your flower feels unseen! Let it stand out with a splash of color. ʕಥᴥಥʔ"),
+                .min(1, "No colors? Your flower feels unseen! Let yours stand out with a splash of color ʕಥᴥಥʔ"),
         }),
         onSubmit: async (form) => {
             if (form.name) {
@@ -91,7 +99,7 @@ const FlowerForm = () => {
 
     return (
         <>
-            <h2>Add Flower</h2>
+            <h2>Floressa Bloomspace: Enrich Your Garden with a New Bloom</h2>
             <form onSubmit={flowerForm.handleSubmit}>
                 <label>Name</label>
                 <input name="name" type="text" onChange={flowerForm.handleChange} value={flowerForm.values.name} placeholder="Enter flower name" autoFocus />

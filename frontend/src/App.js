@@ -9,8 +9,9 @@ function App() {
   return (
     <div className="App">
       <div className='navbar'>
-      <h1>Welcome to my flowers app</h1>
-      </div>
+    <h1>Floressa: A Floral Wonderland Awaits You</h1>
+    </div>
+
       <BrowserRouter>
         <Routes>
           <Route path="/flowers" element={<FlowersList />} />
