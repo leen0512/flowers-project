@@ -1,11 +1,10 @@
 from schemas.Flower_schema import Flower
 from sqlalchemy.orm import Session
 from models.FlowerModel import FlowerModel
-
-
+from sqlalchemy import desc
 
 async def get_flowers_from_db(db: Session):
-    return db.query(FlowerModel).all()
+    return db.query(FlowerModel).filter(FlowerModel.deleted == False).order_by(FlowerModel.id.asc()).all()
 
 
 async def add_flower(db: Session, flower: Flower):
