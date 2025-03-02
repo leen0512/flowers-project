@@ -3,9 +3,6 @@ from sqlalchemy.orm import Session
 from models.FlowerModel import FlowerModel
 
 
-mockFlowers = [
-]
-
 
 async def get_flowers_from_db(db: Session):
     return db.query(FlowerModel).all()

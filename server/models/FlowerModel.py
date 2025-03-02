@@ -11,4 +11,3 @@ class FlowerModel(Base):
     color_ids = Column(ARRAY(Integer), nullable=False)
     image_url = Column(String, nullable=False)
     description = Column(String, nullable=False)
-

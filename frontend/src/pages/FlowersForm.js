@@ -11,12 +11,11 @@ const FlowerForm = () => {
     const isEditMode = Boolean(id);
 
     const mockColors = [
-        { id: 1, name: "red" }, { id: 2, name: "blue" }, { id: 3, name: "yellow" },
-        { id: 4, name: "green" }, { id: 5, name: "orange" }, { id: 6, name: "purple" },
-        { id: 7, name: "pink" }, { id: 8, name: "white" }, { id: 9, name: "brown" },
-        { id: 10, name: "black" }
+        { id: 1, name: "pink" }, { id: 2, name: "blue" }, { id: 3, name: "red" },
+        { id: 4, name: "yellow" }, { id: 5, name: "purple" }, { id: 6, name: "white" },
+        { id: 7, name: "orange" }, { id: 8, name: "green" },
+        { id: 9, name: "brown" }, { id: 10, name: "black" },{ id: 11, name: "multicolor" },{ id: 12, name: "other" }
     ];
-    
     
     const queryClient = useQueryClient(); // ✅ Ensure we have access to QueryClient
 
@@ -99,7 +98,7 @@ const FlowerForm = () => {
 
     return (
         <>
-            <h2>Floressa Bloomspace: Enrich Your Garden with a New Bloom</h2>
+            <h2>Add a Flower</h2>
             <form onSubmit={flowerForm.handleSubmit}>
                 <label>Name</label>
                 <input name="name" type="text" onChange={flowerForm.handleChange} value={flowerForm.values.name} placeholder="Enter flower name" autoFocus />
@@ -136,7 +135,7 @@ const FlowerForm = () => {
             <br/>
 
 
-            <button disabled={!flowerForm.isValid} type="submit">Submit</button>
+            <button className="button-submit" disabled={!flowerForm.isValid} type="submit">Submit</button>
             </form>
         </>
     );

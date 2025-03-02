@@ -47,7 +47,7 @@ body::before {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  opacity: 0.2; /* Adjusts transparency of the background */
+  opacity: 0.17; /* Adjusts transparency of the background */
   z-index: -1; /* Places the background behind the content */
 }
 
@@ -63,10 +63,28 @@ body::before {
 
 .navbar {
   display: flex;
+  justify-content: center; /* Centers the header */
+  align-items: center; /* Centers items vertically */
   height: 100px;
-  justify-content: center; /* Centers items horizontally */
-  align-items: center;     /* Centers items vertically */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  position: relative; /* Needed for absolute positioning inside */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar_icons {
+  display: flex;
+  gap: 7px;
+  position: absolute;
+  left: 20px;
+}
+
+.navbar_icons img {
+  width: 50px;
+  cursor: pointer; /* Apply cursor pointer directly */
+}
+
+.navbar_icons img:hover {
+  opacity: 0.7; /* Example hover effect */
+
 }
 
 
@@ -123,7 +141,7 @@ input[type="checkbox"] {
   margin-right: 5px;
 }
 
-button {
+.button-submit {
   background-color: #e0d6e48f;
   color: #6a4f4b;
   border: none;
@@ -138,7 +156,7 @@ button {
   margin: 15px;
 }
 
-button:hover {
+.button-submit:hover {
   background-color: #6a4f4b;
   color: #e4d0d0;
 }
@@ -156,15 +174,94 @@ input[type="text"]:focus, select:focus {
   outline: 2px solid #a38486;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  border-style: solid;
-  border-width: 10px;
-  border-color: #c6bdbe;
-  border-radius:30%;
-  margin-top: 20px;
+
+.flower-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  gap: 20px;
+  justify-content: center;
 }
+
+.flower-card {
+  background: #f9f3f3;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  width: 320px; /* Fixed width */
+  height: 400px; /* Increased height */
+  text-align: center;
+  transition: transform 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden; /* Ensure content stays inside */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Edit button should stay inside the card */
+.edit-button {
+  position: relative; /* Make sure it's within the card */
+  bottom: 10px; /* Adjust spacing */
+  border: none;
+  color: #9f8a8a;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 80px;
+  align-self: center;
+}
+
+.edit-button:hover {
+  color: #9f8a8a89;
+}
+
+
+
+.flower-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.flower-image {
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.flower-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: auto;
+  background: rgba(233, 224, 224, 0.7);
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+
+.flower-container:hover .flower-info {
+  opacity: 1;
+}
+
+.flower-container:hover .flower-image {
+  opacity: 0.5;
+}
+
 
 /* Styles for the flowers' description */
 div > p {
@@ -177,7 +274,7 @@ div > p {
 p {
   color: #6a4f4b;
   font-family: "Monotype Corsiva", cursive;
-  font-size: 30px; 
+  font-size: 20px; 
 }
 
 
