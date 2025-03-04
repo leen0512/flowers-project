@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from routes.flowers_route import router as flower_router
 from fastapi.middleware.cors import CORSMiddleware
-
 app = FastAPI()
 
 

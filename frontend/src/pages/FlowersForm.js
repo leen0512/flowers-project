@@ -1,54 +1,61 @@
 import React from "react";
 import { useFormik } from "formik";
 import axios from "axios";
-import {object, string, array} from "yup"
+import { object, string, array } from "yup";
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
-import {useParams} from "react-router-dom"
+import { useParams } from "react-router-dom";
 
 const FlowerForm = () => {
-    const {id} = useParams();
+    const { id } = useParams();
     const isEditMode = Boolean(id);
 
     const mockColors = [
         { id: 1, name: "pink" }, { id: 2, name: "blue" }, { id: 3, name: "red" },
         { id: 4, name: "yellow" }, { id: 5, name: "purple" }, { id: 6, name: "white" },
         { id: 7, name: "orange" }, { id: 8, name: "green" },
-        { id: 9, name: "brown" }, { id: 10, name: "black" },{ id: 11, name: "multicolor" },{ id: 12, name: "other" }
+        { id: 9, name: "brown" }, { id: 10, name: "black" }, { id: 11, name: "multicolor" }, { id: 12, name: "other" }
     ];
-    
-    const queryClient = useQueryClient(); // ✅ Ensure we have access to QueryClient
 
-    // Function to post a new flower
-    const sendNewFlower = async (flowerData) => {
-        const res = await axios.post("http://localhost:8000/flowers", {
-            ...flowerData,
-            color_ids: flowerData.color_ids
-        });
+    const queryClient = useQueryClient(); // Ensure we have access to QueryClient
+
+    // Function to post a new flower or update an existing one
+    const sendFlower = async (flowerData) => {
+    if (isEditMode) {
+        // Make PUT request to update an existing flower
+        const res = await axios.put(`http://localhost:8000/flowers/${id}`, flowerData);
         return res.data;
-    };
+    } else {
+        // Make POST request to add a new flower
+        const res = await axios.post("http://localhost:8000/flowers", flowerData);
+        return res.data;
+    }
+};
+
 
     const fetchFlower = async (flowerId) => {
         const res = await axios.get(`http://localhost:8000/flowers/${flowerId}`);
         return res.data;
-    }
-    const {data:flowerData} = useQuery({
+    };
+
+    const { data: flowerData } = useQuery({
         queryKey: ["flower", id],
         queryFn: () => fetchFlower(id),
-        enable: isEditMode,
+        enabled: isEditMode,  // Ensures data is fetched only in edit mode
     });
+    
 
     const mutation = useMutation({
-        mutationFn: sendNewFlower,
+        mutationFn: sendFlower,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["flowers"] }); // ✅ Proper invalidation syntax in v5
+            queryClient.invalidateQueries({ queryKey: ["flowers"] }); // Invalidate flower list
         },
         onError: (error) => {
             console.error("Mutation error:", error);
         }
     });
 
-    // Function to fetch Wikipedia data
+    // Function to fetch Wikipedia data for flower description and image
     const fetchData = async (flowerName) => {
         try {
             const formattedName = flowerName.trim().replace(/\s+/g, "_");
@@ -65,9 +72,15 @@ const FlowerForm = () => {
         }
     };
 
-    // Form handling
+    // Form handling with Formik
     const flowerForm = useFormik({
-        initialValues: {
+        initialValues: flowerData ? {
+            name: flowerData.name,
+            season: flowerData.season,
+            color_ids: flowerData.color_ids,
+            image_url: flowerData.image_url,
+            description: flowerData.description
+        } : {
             name: "",
             season: "",
             color_ids: [],
@@ -86,26 +99,40 @@ const FlowerForm = () => {
                 .min(1, "No colors? Your flower feels unseen! Let yours stand out with a splash of color ʕಥᴥಥʔ"),
         }),
         onSubmit: async (form) => {
+            console.log("Submitting form", form);
             if (form.name) {
                 const { description, image_url } = await fetchData(form.name);
                 flowerForm.setValues({ ...form, description, image_url });
-                
-                mutation.mutate({ ...form, description, image_url });
+        
+                mutation.mutate({ ...form, description, image_url });  // This will trigger the mutation
                 flowerForm.resetForm();
             }
         }
-});
+        
+    });
 
     return (
         <>
-            <h2>Add a Flower</h2>
+            <h1>{isEditMode ? "Floressa Bloom: Refine the Garden" : "Floressa Bloom: Enrich the Garden"}</h1>
             <form onSubmit={flowerForm.handleSubmit}>
                 <label>Name</label>
-                <input name="name" type="text" onChange={flowerForm.handleChange} value={flowerForm.values.name} placeholder="Enter flower name" autoFocus />
+                <input
+                    name="name"
+                    type="text"
+                    onChange={flowerForm.handleChange}
+                    value={flowerForm.values.name}
+                    placeholder="Enter flower name"
+                    autoFocus
+                />
                 <p>{flowerForm.errors.name}</p>
-                <br></br>
+                <br />
+                
                 <label>Season</label>
-                <select name="season" onChange={flowerForm.handleChange} value={flowerForm.values.season}>
+                <select
+                    name="season"
+                    onChange={flowerForm.handleChange}
+                    value={flowerForm.values.season}
+                >
                     <option value="">Select a season</option>
                     <option value="Spring">Spring</option>
                     <option value="Summer">Summer</option>
@@ -113,29 +140,30 @@ const FlowerForm = () => {
                     <option value="Winter">Winter</option>
                 </select>
                 <p>{flowerForm.errors.season}</p>
-                <br></br>
+                <br />
 
-        <label>Colors</label>
-        <div className="color-options">
-            {mockColors.map((c) => (
-                <label key={c.id} className="color-option">
-                    <input
-                        type="checkbox"
-                        name="color_ids"
-                        value={c.id}
-                        onChange={flowerForm.handleChange}
-                        checked={flowerForm.values.color_ids.includes(String(c.id))}
-                        className="color-checkbox"
-                    />
-                    <span className="color-name">{c.name}</span>
-                </label>
-            ))}
-        </div>
-        <p>{flowerForm.errors.color_ids}</p>
-            <br/>
+                <label>Colors</label>
+                <div className="color-options">
+                    {mockColors.map((c) => (
+                        <label key={c.id} className="color-option">
+                            <input
+                                type="checkbox"
+                                name="color_ids"
+                                value={c.id}
+                                onChange={flowerForm.handleChange}
+                                checked={flowerForm.values.color_ids.includes(String(c.id))}
+                                className="color-checkbox"
+                            />
+                            <span className="color-name">{c.name}</span>
+                        </label>
+                    ))}
+                </div>
+                <p>{flowerForm.errors.color_ids}</p>
+                <br />
 
-
-            <button className="button-submit" disabled={!flowerForm.isValid} type="submit">Submit</button>
+                <button className="button-submit" disabled={!flowerForm.isValid} type="submit">
+                    {isEditMode ? "Update" : "Submit"}
+                </button>
             </form>
         </>
     );

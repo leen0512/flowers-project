@@ -1,7 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 function FlowersList() {
+    const navigate = useNavigate();
     const queryClient = useQueryClient();  // Initialize queryClient here
     
     const getFlowers = async () => {
@@ -24,12 +26,16 @@ function FlowersList() {
         },
     });
 
+    const handleEditClick = (id) => {
+        navigate(`/edit/${id}`);  // Navigate to the edit page with the flower id
+    };
+
     if (isLoading) return <p>Loading Data... </p>;
     if (error) return <p>{error.message}</p>;
 
     return (
         <div className="flowers-list-container">
-            <h2 className="gallery-title">Floressa Gallery: Lose Yourself in the Blooms</h2>
+            <h1>Floressa Gallery: Lose Yourself in the Blooms</h1>
             <ul className="flower-list">
                 {flowers.map((flower) => {
                     const updatedName = flower.name.toLowerCase().replace(/\s+/g, "-");
@@ -56,11 +62,18 @@ function FlowersList() {
                                     </div>
                                 </div>
                             </a>
+                           <div style={{display:"flex"}}>
+                           <button
+                                onClick={() => handleEditClick(flower.id)}
+                                className="edit-button">
+                                Edit
+                            </button>
                             <button
                                 onClick={() => deleteFlower.mutate(flower.id)}
                                 className="edit-button">
                                 Delete
                             </button>
+                           </div>
                         </li>
                     );
                 })}

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from schemas.Flower_schema import Flower
 from services.flower_service import add_flower, get_flowers_from_db
 from sqlalchemy.orm import Session
@@ -19,6 +19,26 @@ async def get_flowers_route(db: Session = Depends(get_db)):
 async def add_flower_route(new_flower: Flower, db: Session = Depends(get_db)):
     return await add_flower(db, new_flower)
     
+
+# Route to update an existing flower
+@router.put("/{flower_id}")
+async def update_flower_route(flower_id: int, updated_flower: Flower, db: Session = Depends(get_db)):
+    flower = db.query(FlowerModel).filter(FlowerModel.id == flower_id).first()
+    
+    if not flower:
+        raise HTTPException(status_code=404, detail="Flower not found")
+    
+    # Update the flower's details
+    flower.name = updated_flower.name
+    flower.season = updated_flower.season
+    flower.color_ids = updated_flower.color_ids
+    flower.image_url = updated_flower.image_url
+    flower.description = updated_flower.description
+
+    db.commit()
+    db.refresh(flower)  # Refresh the object to reflect changes
+
+    return flower
 
 
 @router.put("/delete/{flower_id}")

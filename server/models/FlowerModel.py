@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ARRAY, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -7,9 +7,9 @@ class FlowerModel(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-    season = Column(String, nullable=False)
-    color_ids = Column(ARRAY(Integer), nullable=False)
-    image_url = Column(String, nullable=False)
-    description = Column(String, nullable=False)
-    deleted = Column(Boolean, default=False)  # עמודת Soft Delete
-    deleted_on = Column(DateTime, nullable=True)  # תאריך מחיקה
+    season = Column(String, nullable=True)
+    color_ids = Column(String, nullable=True)  # אם יש קשרים, ודאי שזה תואם לסכימה
+    image_url = Column(String, nullable=True)
+    description = Column(String, nullable=True)
+    deleted = Column(Boolean, default=False)
+    deleted_on = Column(String, nullable=True)

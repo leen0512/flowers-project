@@ -1,8 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import FlowersList from './pages/FlowersList';
-import FlowersItem from './pages/FlowersItem';
 import FlowerForm from './pages/FlowersForm';
+import FlowerHome from './pages/FlowerHome';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 
 function App() {
@@ -11,8 +11,8 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
+          <Route path="/" element={<FlowerHome />} />
           <Route path="/flowers" element={<FlowersList />} />
-          <Route path="/flowers/:id" element={<FlowersItem />} />
           <Route path="/add" element={<FlowerForm />} />
           <Route path="/edit/:id" element={<FlowerForm />} />
         </Routes>

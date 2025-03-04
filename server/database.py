@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+import OS
 
-DATABASE_URL = "postgresql://postgres:Alkerem1!@localhost:5432/flowers_db"
+DATABASE_URL = OS.getenv("DATABASE_URL","postgresql://postgres:Alkerem1!@db:5435/flowers_db")
 
-#מנהל חיבור
 engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -16,3 +16,4 @@ def get_db():
         yield db #similar to return
     finally:
         db.close()
+
