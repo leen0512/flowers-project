@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
-import OS
+# import pandas as pandas
+# import numpy as np
 
-DATABASE_URL = OS.getenv("DATABASE_URL","postgresql://postgres:Alkerem1!@db:5435/flowers_db")
+DATABASE_URL = "postgresql://postgres:Alkerem1!@db:5435/flowers_db"
 
 engine = create_engine(DATABASE_URL)
 

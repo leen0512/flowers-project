@@ -9,5 +9,5 @@ class Flower(BaseModel):
     color_ids: list[int]
     image_url: str
     description: str
-    deleted: Optional[bool] = False 
-    deleted_on: Optional[datetime] = None 
+    deleted: Optional[bool] = False
+    deleted_on: Optional[datetime] = None

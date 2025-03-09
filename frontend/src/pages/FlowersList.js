@@ -36,6 +36,9 @@ function FlowersList() {
     return (
         <div className="flowers-list-container">
             <h1>Floressa Gallery: Lose Yourself in the Blooms</h1>
+            <div style={{ display: "flex", justifyContent:"flex-end", width: "100%" }}>
+            <img onClick={() => navigate('/bin')} title="🌿 Lost Petals Sanctuary – 🌸 Deleted Flowers Rest Here" src="images/recycle-bin.png" className="recycle-bin" alt="recycle bin icon"></img>
+            </div>
             <ul className="flower-list">
                 {flowers.map((flower) => {
                     const updatedName = flower.name.toLowerCase().replace(/\s+/g, "-");
