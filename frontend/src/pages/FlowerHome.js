@@ -44,53 +44,29 @@ function FlowerHome() {
       {isLoading && <p>Loading flowers...</p>}
       {error && <p>Error: {error.message}</p>}
 
+
       {flowerOfTheDay && !isLoading && !error && (
       <div style={{ textAlign: "center", padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h2 style={{ color: "#6a4c93", fontSize: "24px", marginBottom: "10px" }}>
+      <h2 style={{ color: "#7c574d", fontSize: "24px", marginBottom: "10px" }}>
         ❁Secret Garden Surprise: {flowerOfTheDay.name}
       </h2>
       <img
         src={flowerOfTheDay.image_url}
         alt={flowerOfTheDay.name}
         onError={(e) => (e.target.src = "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg")}
-        style={{ width: "140px", height: "100px", borderRadius: "8px", marginBottom: "15px" }}
+        style={{ width: "250px", height: "auto", borderRadius: "8px", marginBottom: "15px" }}
       />
-      <p style={{ fontSize: "16px", color: "#333", marginBottom: "20px" }}>{flowerOfTheDay.description}</p>
-      <p style={{ fontSize: "18px", color: "#333", marginBottom: "20px" }}>
-        ✨ Would you plant this beauty in your dream garden? Share your thoughts! 🌱💬
+      <p style={{backgroundColor:"#f6eeeb", textAlign:"center", height:"36px", fontSize: "18px", color: "#7c574d", marginBottom: "20px" }}>
+        Would you plant this beauty in your dream garden? Share your thoughts! 🌱💬
       </p>
-      <button
-        onClick={() => setResponse(`Yay! This flower would be a beautiful addition to your dream garden! 🌸 You can also visit the gallery and click on the photo of this flower to learn how to take care of it!`)}
-        style={{
-          backgroundColor: "#6a4c93",
-          color: "white",
-          border: "none",
-          padding: "10px 20px",
-          borderRadius: "5px",
-          fontSize: "16px",
-          cursor: "pointer",
-          marginRight: "10px",
-          transition: "background-color 0.3s ease",
-        }}
-      >
+      <button className="yes-no-buttons" onClick={() => setResponse(`Yay! This flower would be a beautiful addition to your dream garden!  You can also visit the gallery and click on the photo of this flower to learn how to take care of it!`)}>
         Yes
       </button>
-      <button
-        onClick={() => setResponse("No worries! Each time you refresh, a new flower will bloom in the Secret Garden. 🌿 Come back to discover your perfect match!")}
-        style={{
-          backgroundColor: "#88b04b",
-          color: "white",
-          border: "none",
-          padding: "10px 20px",
-          borderRadius: "5px",
-          fontSize: "16px",
-          cursor: "pointer",
-          transition: "background-color 0.3s ease",
-        }}
-      >
-        No, not my style 🌿
+      <button className="yes-no-buttons" onClick={() => setResponse("No worries! Each time you refresh, a new flower will bloom in the Secret Garden. 🌿 Come back to discover your perfect match!")}>
+        No, not my style
       </button>
-      {response && <p style={{ fontSize: "18px", color: "#6a4c93", marginTop: "20px" }}>{response}</p>}
+
+      {response && <p style={{backgroundColor:"#f6eeeb", textAlign:"center",width:"auto", height:"46px", fontSize: "18px", color: "#7c574d", marginTop: "20px" }}>{response}</p>}
     </div>
     
       )}

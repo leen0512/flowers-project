@@ -35,10 +35,10 @@ function FlowersBin() {
     
     return (
         <div className="flowers-bin-container">
-            <h1>🌿 Lost Petals Sanctuary – 🌸 Deleted Flowers Rest Here</h1>
+            <h1>Floressa Archive: Echoes of Petals Once Bloomed</h1>
             <ul className="flower-list">
                 {deletedFlowers && deletedFlowers.length === 0 ? (
-                    <p>No deleted flowers found.</p>
+                    <p>No flowers deleted, just a garden where nothing’s ever erased</p>
                 ) : (
                     deletedFlowers && deletedFlowers.map((flower) => {
                         const updatedName = flower.name.toLowerCase().replace(/\s+/g, "-");
@@ -68,7 +68,7 @@ function FlowersBin() {
                                 <div style={{ display: "flex" }}>
                                     <button
                                         onClick={() => restoreFlower.mutate(flower.id)}
-                                        className="restore-button">
+                                        className="buttons">
                                         Restore
                                     </button>
                                 </div>

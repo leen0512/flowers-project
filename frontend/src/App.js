@@ -4,6 +4,7 @@ import FlowersList from './pages/FlowersList';
 import FlowerForm from './pages/FlowersForm';
 import FlowerHome from './pages/FlowerHome';
 import FlowersBin from './pages/FlowerBin';
+import FlowerEdit from './pages/FlowerEdit';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
           <Route path="/" element={<FlowerHome />} />
           <Route path="/flowers" element={<FlowersList />} />
           <Route path="/add" element={<FlowerForm />} />
-          <Route path="/edit/:id" element={<FlowerForm />} />
+          <Route path="/edit/:id" element={<FlowerEdit />} />
           <Route path="/bin" element={<FlowersBin />} />        </Routes>
       </div>
     </BrowserRouter>

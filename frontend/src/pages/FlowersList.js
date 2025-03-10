@@ -68,12 +68,12 @@ function FlowersList() {
                            <div style={{display:"flex"}}>
                            <button
                                 onClick={() => handleEditClick(flower.id)}
-                                className="edit-button">
+                                className="buttons">
                                 Edit
                             </button>
                             <button
                                 onClick={() => deleteFlower.mutate(flower.id)}
-                                className="edit-button">
+                                className="buttons">
                                 Delete
                             </button>
                            </div>
