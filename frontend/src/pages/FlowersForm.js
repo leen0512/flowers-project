@@ -2,12 +2,12 @@ import React from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import { object, string, array } from "yup";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
 const FlowerForm = () => {
     const { id } = useParams();
-    const queryClient = useQueryClient();
 
     const mockColors = [
         { id: 1, name: "pink" }, { id: 2, name: "blue" }, { id: 3, name: "red" },
@@ -16,7 +16,16 @@ const FlowerForm = () => {
         { id: 9, name: "brown" }, { id: 10, name: "black" }, { id: 11, name: "multicolor" }, { id: 12, name: "other" }
     ];
 
-    // Fetch flower data if editing an existing flower
+    const queryClient = useQueryClient(); // Ensure we have access to QueryClient
+
+    // Function to post a new flower or update an existing one
+    const sendFlower = async (flowerData) => {
+        const res = await axios.post("http://localhost:8000/flowers", flowerData);
+        return res.data;
+    
+};
+
+
     const fetchFlower = async (flowerId) => {
         const res = await axios.get(`http://localhost:8000/flowers/${flowerId}`);
         return res.data;
@@ -25,26 +34,20 @@ const FlowerForm = () => {
     const { data: flowerData } = useQuery({
         queryKey: ["flower", id],
         queryFn: () => fetchFlower(id),
-        enabled: !!id, // Only fetch if there's an ID (edit mode)
     });
-
-    // Function to add a new flower
-    const sendFlower = async (flowerData) => {
-        const res = await axios.post("http://localhost:8000/flowers", flowerData);
-        return res.data;
-    };
+    
 
     const mutation = useMutation({
         mutationFn: sendFlower,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["flowers"] });
+            queryClient.invalidateQueries({ queryKey: ["flowers"] }); // Invalidate flower list
         },
         onError: (error) => {
             console.error("Mutation error:", error);
         }
     });
 
-    // Fetch Wikipedia data for flower description and image
+    // Function to fetch Wikipedia data for flower description and image
     const fetchData = async (flowerName) => {
         try {
             const formattedName = flowerName.trim().replace(/\s+/g, "_");
@@ -61,7 +64,7 @@ const FlowerForm = () => {
         }
     };
 
-    // Formik setup
+    // Form handling with Formik
     const flowerForm = useFormik({
         initialValues: flowerData ? {
             name: flowerData.name,
@@ -89,43 +92,20 @@ const FlowerForm = () => {
         }),
         onSubmit: async (form) => {
             console.log("Submitting form", form);
-
-            try {
-                // Check if a flower with the same name already exists
-                const existingFlowers = await axios.get("http://localhost:8000/flowers");
-                const isDuplicate = existingFlowers.data.some(
-                    (flower) => flower.name.toLowerCase() === form.name.toLowerCase()
-                );
-
-                if (isDuplicate) {
-                    flowerForm.setErrors({
-                        name: "This flower is already blooming in our garden! 🌸 Try another name.",
-                    });
-                    return; // Stop submission
-                }
-
-                // If no duplicate, fetch Wikipedia data
+            if (form.name) {
                 const { description, image_url } = await fetchData(form.name);
-                const updatedForm = { ...form, description, image_url };
-
-                // Set the updated values in Formik
-                flowerForm.setValues(updatedForm);
-
-                // Submit to backend
-                mutation.mutate(updatedForm);
+                flowerForm.setValues({ ...form, description, image_url });
+        
+                mutation.mutate({ ...form, description, image_url });  // This will trigger the mutation
                 flowerForm.resetForm();
-
-            } catch (error) {
-                console.error("Error checking duplicate:", error);
-                flowerForm.setErrors({
-                    name: "Something went wrong while checking the name. Please try again. ❀",
-                });
             }
         }
+        
     });
 
     return (
         <>
+        {/* {isEditMode ? "Floressa Bloom: Refine the Garden" :  */}
             <h1>Floressa Bloom: Enrich the Garden</h1>
             <form onSubmit={flowerForm.handleSubmit}>
                 <label>Name</label>
@@ -139,7 +119,7 @@ const FlowerForm = () => {
                 />
                 <p>{flowerForm.errors.name}</p>
                 <br />
-
+                
                 <label>Season</label>
                 <select
                     name="season"

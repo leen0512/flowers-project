@@ -308,6 +308,7 @@ div > p {
 
 p {
   color: #6a4f4b;
+  text-align: center;
   font-family: "Monotype Corsiva", cursive;
   font-size: 20px; 
 }

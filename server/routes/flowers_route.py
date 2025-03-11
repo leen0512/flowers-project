@@ -12,15 +12,24 @@ router = APIRouter()
 async def get_flowers_route(db: Session = Depends(get_db)):
     return await get_flowers_from_db(db)
 
-@router.get("/bin", tags=["Flowers"], include_in_schema=True)
+@router.get("/bin")
 async def get_bin_flowers_route(db: Session = Depends(get_db)):
     return await get_deleted_flowers_from_db(db)
-
 
 # Route to add a new flower
 @router.post("/")
 async def add_flower_route(new_flower: Flower, db: Session = Depends(get_db)):
     return await add_flower(db, new_flower)
+
+
+@router.get("/{flower_id}") 
+def get_flower(flower_id: int, db: Session = Depends(get_db)):
+    flower = db.query(FlowerModel).filter(FlowerModel.id == flower_id).first()
+    if not flower:
+        raise HTTPException(status_code=404, detail="Flower not found")
+    return flower
+
+
 
 @router.put("/{flower_id}")
 async def update_flower(flower_id: int, updated_flower: Flower, db: Session = Depends(get_db)):
@@ -29,23 +38,24 @@ async def update_flower(flower_id: int, updated_flower: Flower, db: Session = De
     if not flower:
         raise HTTPException(status_code=404, detail="Flower not found")
     
-    # Update fields
-    flower.name = updated_flower.name
-    flower.season = updated_flower.season
-    flower.color_ids = updated_flower.color_ids
-    flower.image_url = updated_flower.image_url
-    flower.description = updated_flower.description
-    flower.deleted = updated_flower.deleted
+    # Only update fields that are present
+    flower.name = updated_flower.name or flower.name
+    flower.season = updated_flower.season or flower.season
+    flower.color_ids = updated_flower.color_ids if updated_flower.color_ids else flower.color_ids
+    flower.image_url = updated_flower.image_url or flower.image_url
+    flower.description = updated_flower.description or flower.description
+    flower.deleted = updated_flower.deleted if updated_flower.deleted is not None else flower.deleted
 
-    # If the flower is being marked as deleted, set the `deleted_on` field
     if updated_flower.deleted:
-        flower.deleted_on = datetime.utcnow()
+        flower.deleted_on = datetime.utcnow()  # Set deleted_on only if deleting
     else:
-        flower.deleted_on = None  # Reset deleted_on if restoring
+        flower.deleted_on = None  # Reset if not deleted
     
     db.commit()
     
     return {"message": "Flower updated successfully", "flower": flower}
+
+
 
 @router.put("/delete/{flower_id}")
 async def soft_delete_flower(flower_id: int, db: Session = Depends(get_db)):

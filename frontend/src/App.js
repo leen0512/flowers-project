@@ -17,7 +17,8 @@ function App() {
           <Route path="/flowers" element={<FlowersList />} />
           <Route path="/add" element={<FlowerForm />} />
           <Route path="/edit/:id" element={<FlowerEdit />} />
-          <Route path="/bin" element={<FlowersBin />} />        </Routes>
+          <Route path="/bin" element={<FlowersBin />} />
+        </Routes>
       </div>
     </BrowserRouter>
   );

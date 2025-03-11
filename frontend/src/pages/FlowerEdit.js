@@ -49,16 +49,34 @@ const FlowerEdit = () => {
             description: ""
         },
         validationSchema: object({
-            name: string().trim().min(3, "That's not a name, that's a lost petal!").required("Flower needs a name!"),
-            season: string().required("Select a season!"),
-            color_ids: array().min(1, "Select at least one color!"),
+            name: string()
+                .trim()
+                .min(3, "A name that short? Even sprouts need room to grow! 🌱")
+                .matches(/^\S.*$/, "No tiptoeing around! A flower’s name starts bold, not with a space! 🚫❀")
+                .required("Your flower deserves an identity, not just a mystery! (˘͈ᵕ ˘͈❀)"),
+            season: string()
+                .required("Every flower needs its moment to bloom—choose a season! 🌼"),
+            color_ids: array()
+                .min(1, "No colors? Your flower feels unseen! Let it shine with a splash of color! 🎨❀"),
+            description: string()
+                .trim()
+                .matches(/^\S.*$/, "A flower’s story begins with a word, not an empty breeze! 🍃")
+                .required("Every flower has a tale—give yours a description! 📖🌸"),
+            image_url: string()
+                .trim()
+                .matches(/^\S.*$/, "A picture is worth a thousand petals—don’t start with a blank space! 📸❀")
+                .required("Even the rarest blooms need a picture! Add an image URL! 🌷✨"),
         }),
         onSubmit: (form) => {
+            console.log("Submitting form data:", form); // Log the form data here
             mutation.mutate(form);
+            flowerForm.resetForm();
         },
     });
+    
 
     useEffect(() => {
+        console.log(flowerData); // Check what data is being fetched
         if (flowerData) {
             flowerForm.setValues({
                 name: flowerData.name || "",
@@ -69,6 +87,7 @@ const FlowerEdit = () => {
             });
         }
     }, [flowerData]);
+    
 
     if (isLoading) return <p>Loading...</p>;
 
@@ -129,16 +148,18 @@ const FlowerEdit = () => {
                                 name="color_ids"
                                 value={c.id}
                                 onChange={flowerForm.handleChange}
-                                checked={flowerForm.values.color_ids.includes(c.id)}
+                                checked={flowerForm.values.color_ids.includes(String(c.id))}
                                 className="color-checkbox"
                             />
                             <span className="color-name">{c.name}</span>
                         </label>
                     ))}
                 </div>
+
+
                 <p>{flowerForm.errors.color_ids}</p>
 
-                <button className="button-submit" disabled={!flowerForm.isValid} type="submit">
+                <button className="button-submit" disabled={!flowerForm.isValid}  type="submit">
                     Update
                 </button>
             </form>

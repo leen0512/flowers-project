@@ -1,0 +1,46 @@
+Navbar:
+- check if the web navigates to the chosen page when the user clicks on one of the three options in the navbar (home, bloom, gallery)
+- Check if the active page in the navbar is visually highlighted when selected
+
+
+Home page:
+- check if a random flower updates when the page refreshes or reloads
+- check if there is a response when the user clicks on yes or no button
+- check if an error message appears when there are no flowers in the database
+
+
+Bloom:
+- check if the user has entered a name (it must be a string with minimum 3 letters)
+- check if the user has chosen a season from the 4 options he has
+- check if the user has chosen a color (minimum one color)
+- check if an error message appears when the user tries to submit without entering a name
+- check if the form resets after successfully adding a flower
+- check if the user is prevented from submitting invalid data
+
+
+Gallery:
+- check if all flowers from database are being displayed with card style
+- check if 12 circles of colors are being displayed
+- check if when the user clicks on any of the circles, only flowers with this color id are being displayed
+- check if every flower card has edit and delete buttons
+- check if when the user hovers over the flower image, the flower description is being displayed
+- check if clicking on a flower card opens a new tab with a website for how to take care of this flower
+- check if when the user clicks on edit button it navigates to edit form
+- check if when the user clicks on delete button, the flower is being deleted (not displayed in the gallery)
+- check if when the user clicks on the recycle bin, it navigates to recycle bin
+
+
+Recycle bin:
+- check if the flowers that has been deleted are displayed and has restore button option
+- check if when the user clicks on the restore button, the flower will be restored and will be displayed in the gallery again
+- check if an empty state message appears when the recycle bin is empty
+
+
+Edit:
+- check if the user has entered a name (it must be a string with minimum 3 letters)
+- check if the user has chosen a season from the 4 options he has
+- check if the user has entered a description
+- check if the user has entered an image url
+- check if the user has chosen a color (minimum one color)
+- check if the user is prevented from submitting invalid data
+- check if the edited flower appears updated in the gallery
