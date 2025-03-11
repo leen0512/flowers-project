@@ -67,6 +67,19 @@ function FlowersList() {
             </div>
 
 
+
+            {filteredFlowers.length === 0 ? (
+                <p style={{ textAlign: "center", color: "#6a4f4b", fontSize: "18px", fontFamily: "Monotype Corsiva" }}>
+                    (✿◕︿◕) Oops! No flowers bloom in this color yet. Try another hue!
+                </p>
+            ) : (
+                <p style={{ marginTop: "30px", color: "#6a4f4b", textAlign: "left", fontFamily: "Monotype Corsiva", fontSize: "20px" }}>
+                    (づ ᴗ _ᴗ)づ♡ Click on the flower’s image to unveil its secret care guide
+                </p>
+            )}
+
+
+
             <ul className="flower-list">
                 {filteredFlowers.map((flower) => {
                     const updatedName = flower.name.toLowerCase().replace(/\s+/g, "-");
