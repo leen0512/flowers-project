@@ -52,7 +52,7 @@ const FlowerEdit = () => {
             name: string()
                 .trim()
                 .min(3, "A name that short? Even sprouts need room to grow! 🌱")
-                .matches(/^\S.*$/, "No tiptoeing around! A flower’s name starts bold, not with a space! 🚫❀")
+                .matches(/^\S.*$/, "No tiptoeing around! A flower's name starts bold, not with a space! 🚫❀")
                 .required("Your flower deserves an identity, not just a mystery! (˘͈ᵕ ˘͈❀)"),
             season: string()
                 .required("Every flower needs its moment to bloom—choose a season! 🌼"),
@@ -60,34 +60,61 @@ const FlowerEdit = () => {
                 .min(1, "No colors? Your flower feels unseen! Let it shine with a splash of color! 🎨❀"),
             description: string()
                 .trim()
-                .matches(/^\S.*$/, "A flower’s story begins with a word, not an empty breeze! 🍃")
+                .matches(/^\S.*$/, "A flower's story begins with a word, not an empty breeze! 🍃")
                 .required("Every flower has a tale—give yours a description! 📖🌸"),
             image_url: string()
                 .trim()
-                .matches(/^\S.*$/, "A picture is worth a thousand petals—don’t start with a blank space! 📸❀")
+                .matches(/^\S.*$/, "A picture is worth a thousand petals—don't start with a blank space! 📸❀")
                 .required("Even the rarest blooms need a picture! Add an image URL! 🌷✨"),
         }),
         onSubmit: (form) => {
-            console.log("Submitting form data:", form); // Log the form data here
+            console.log("Submitting form data:", form);
             mutation.mutate(form);
             flowerForm.resetForm();
         },
     });
-    
+
+    // This function takes the PostgreSQL array string format and converts it to a proper JavaScript array.
+    const parsePostgresArray = (pgArray) => {
+        if (!pgArray || typeof pgArray !== 'string') return [];
+        
+        // Remove the curly braces and split by comma
+        return pgArray
+            .replace(/{|}/g, '')  // Remove { and }
+            .split(',')
+            .map(item => item.trim());  // Trim any whitespace
+    };
 
     useEffect(() => {
-        console.log(flowerData); // Check what data is being fetched
         if (flowerData) {
+            console.log("Flower data from API:", flowerData);
+            
+            let colorIds = [];
+            
+            // Check if color_ids is a PostgreSQL array string format like "{6,7,4,3,1}"
+            if (typeof flowerData.color_ids === 'string' && 
+                flowerData.color_ids.startsWith('{') && 
+                flowerData.color_ids.endsWith('}')) {
+                
+                colorIds = parsePostgresArray(flowerData.color_ids);
+                console.log("Parsed PostgreSQL array:", colorIds);
+            } 
+            // If it's already an array, just convert to strings
+            else if (Array.isArray(flowerData.color_ids)) {
+                colorIds = flowerData.color_ids.map(id => String(id));
+            }
+            
+            console.log("Setting initial color_ids:", colorIds);
+            
             flowerForm.setValues({
                 name: flowerData.name || "",
                 season: flowerData.season || "",
-                color_ids: flowerData.color_ids || [],
+                color_ids: colorIds,
                 image_url: flowerData.image_url || "",
                 description: flowerData.description || "",
             });
         }
     }, [flowerData]);
-    
 
     if (isLoading) return <p>Loading...</p>;
 
@@ -146,7 +173,7 @@ const FlowerEdit = () => {
                             <input
                                 type="checkbox"
                                 name="color_ids"
-                                value={c.id}
+                                value={String(c.id)}
                                 onChange={flowerForm.handleChange}
                                 checked={flowerForm.values.color_ids.includes(String(c.id))}
                                 className="color-checkbox"
@@ -156,10 +183,9 @@ const FlowerEdit = () => {
                     ))}
                 </div>
 
-
                 <p>{flowerForm.errors.color_ids}</p>
 
-                <button className="button-submit" disabled={!flowerForm.isValid}  type="submit">
+                <button className="button-submit" disabled={!flowerForm.isValid} type="submit">
                     Update
                 </button>
             </form>
